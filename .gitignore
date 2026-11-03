@@ -1,29 +1,12 @@
-# Dependencies
-node_modules
-
-# Build outputs
-dist
-build
-
-# Environment
+node_modules/
+dist/
+build/
+coverage/
 .env
-.env.local
-.env.*.local
-
-# Logs
+.env.*
+!.env.example
+*.pem
+*.key
 *.log
-
-# OS
+result.txt
 .DS_Store
-
-# IDE
-.idea
-*.swp
-
-# Project docs (allow root only)
-**/CLAUDE.md
-!/CLAUDE.md
-
-# package lock
-client/package-lock.json
-server/package-lock.json

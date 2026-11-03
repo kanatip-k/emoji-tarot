@@ -100,14 +100,15 @@ let cards: Card[] = [...defaultCards];
 export const getCards = (): Card[] => {
     // TODO: Implement ข้อ 8
     // Return array ของไพ่ทั้งหมด
-    return [];
+    return [...cards]
 };
+
 
 // ข้อ 9: Get card by ID
 export const getCardById = (id: string): Card | undefined => {
     // TODO: Implement ข้อ 9
     // ใช้ find() เพื่อค้นหาไพ่
-    return undefined;
+    return cards.find(card => card.id === id);
 };
 
 // ข้อ 10: Get random card
@@ -115,15 +116,17 @@ export const getRandomCard = (): Card => {
     // TODO: Implement ข้อ 10
     // ใช้ Math.random() เพื่อสุ่ม index
     // คำใบ้: Math.floor(Math.random() * cards.length)
-    return cards[0]; // placeholder
+    return cards[Math.floor(Math.random() * cards.length)]; // placeholder
 };
 
 // ข้อ 11: Add new card
 export const addCard = (card: Card): Card => {
     // TODO: Implement ข้อ 11
     // ใช้ push() เพื่อเพิ่มไพ่
+    cards.push(card);
     return card;
 };
+
 
 // ข้อ 12: Update card
 export const updateCard = (id: string, updates: Partial<Card>): Card | undefined => {
@@ -132,7 +135,12 @@ export const updateCard = (id: string, updates: Partial<Card>): Card | undefined
     // 2. ถ้าไม่พบ return undefined
     // 3. ใช้ spread operator เพื่อ merge: { ...cards[index], ...updates }
     // 4. return ไพ่ที่อัปเดต
-    return undefined;
+    const index = cards.findIndex(card => card.id === id);
+    if (index === -1) {
+        return undefined;
+    }
+    cards[index] = { ...cards[index], ...updates };
+    return cards[index];
 };
 
 // ข้อ 13: Delete card
@@ -142,7 +150,12 @@ export const deleteCard = (id: string): boolean => {
     // 2. ถ้าไม่พบ return false
     // 3. ใช้ splice() เพื่อลบไพ่
     // 4. return true
-    return false;
+    const index = cards.findIndex(card => card.id === id);
+    if (index === -1) {
+        return false;
+    }
+    cards.splice(index, 1);
+    return true;
 };
 
 // ข้อ 18: Search cards by name
@@ -151,7 +164,7 @@ export const searchCards = (query: string): Card[] => {
     // 1. ใช้ filter() และ includes()
     // 2. แปลงเป็น lowercase เพื่อ case-insensitive search
     // คำใบ้: card.name.toLowerCase().includes(query.toLowerCase())
-    return [];
+    return cards.filter(card => card.name.toLowerCase().includes(query.toLowerCase()));
 };
 
 // ข้อ 20: Reset to default cards
@@ -159,5 +172,6 @@ export const resetCards = (): number => {
     // TODO: Implement ข้อ 20
     // 1. Reset cards = [...defaultCards]
     // 2. Return จำนวนไพ่
-    return 0;
+    cards = [...defaultCards];
+    return cards.length;
 };

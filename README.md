@@ -1,169 +1,44 @@
-# 🔮 Emoji Tarot
+# Emoji Tarot
 
-ยินดีต้อนรับสู่โปรเจค Emoji Tarot! ✨
+A TypeScript learning project with a React frontend and an Express API for emoji-based tarot cards.
 
-## 📖 คำอธิบาย
+## Features and overview
 
-Emoji Tarot เป็นโปรเจคสอนการพัฒนา TypeScript API 101 ด้วย Express:
+The source layout and existing documentation describe card listing, random selection, and create/update/delete operations with in-memory storage. The original README identifies the project as a TypeScript API workshop. The local Git remote identifies [wu-web-camp/emoji-tarot](https://github.com/wu-web-camp/emoji-tarot) as the upstream source. The project owner has confirmed rights to their work; retain upstream attribution and distinguish personal modifications when describing contributions.
 
-- 🎨 **Frontend**: React + Vite พร้อมอนิเมชันการ์ดแบบ interactive
-- 🖥️ **Backend**: Express API สำหรับจัดการข้อมูลไพ่ ✨
+## Tech stack and structure
 
-## 🚀 เริ่มต้นใช้งาน
+- `client/`: React 18, React Router, Vite 6, TypeScript
+- `server/`: Express 4, CORS, UUID, TypeScript, tsx
+- Root scripts use concurrently to run both services.
+- Server build and start scripts use Bun.
 
-### ข้อกำหนดเบื้องต้น
+## Requirements and installation
 
-- Node.js (เวอร์ชันล่าสุด)
-- npm หรือ yarn
+Install Node.js/npm compatible with the checked-in dependency locks. Install Bun to use the existing server build/start scripts. Exact runtime versions are not pinned and have not been tested during migration.
 
-### ติดตั้ง Dependencies
-
-ก่อนเริ่มใช้งาน ต้องติดตั้ง dependencies สำหรับทั้ง server และ client ก่อนนะคะ:
-
-```bash
-npm run install:all
+```sh
+npm ci
+npm --prefix server ci
+npm --prefix client ci
 ```
 
-คำสั่งนี้จะติดตั้ง packages ที่จำเป็นทั้งหมดให้อัตโนมัติ
+## Running and checks
 
-## 🏗️ Project Architecture
-
-```
-emoji-tarot/
-├── client/               # React frontend
-│   └── src/
-│       ├── api/          # Typed fetch wrappers (เชื่อมต่อ API)
-│       ├── components/   # TarotCard, CardForm
-│       ├── pages/        # DrawPage, ManagePage
-│       └── types/        # Card, DTO interfaces
-├── server/               # Express backend
-│   └── src/
-│       ├── data/         # In-memory card storage
-│       ├── routes/       # API route handlers
-│       └── types/        # Card, DTO interfaces
-└── package.json          # Root scripts สำหรับ monorepo
-```
-
-## 🛠️ คำสั่งที่ใช้งาน
-
-### โหมด Development
-
-รันทั้ง server และ client พร้อมกัน:
-
-```bash
+```sh
 npm run dev
-```
-
-หรือรันแยกกัน:
-
-```bash
-# รัน server อย่างเดียว
-npm run dev:server
-
-# รัน client อย่างเดียว
-npm run dev:client
-```
-
-### Build สำหรับ Production
-
-Build ทั้งโปรเจค:
-
-```bash
+npm run typecheck
 npm run build
 ```
 
-หรือ build แยกส่วน:
+The last command requires Bun for the server step. The inspected server defaults to port 3001; Vite defaults to port 5173 and proxies `/api` to the server. Existing documentation lists `/api/cards`, `/api/cards/random`, and `/api/cards/:id` routes.
 
-```bash
-# Build server
-npm run build:server
+Migration verification: TypeScript checks passed for both client and server; the client production build passed. An isolated server smoke test passed GET `/api/health`, `/api/cards`, and `/api/cards/random`, then the temporary server was stopped. The Bun server production build and the complete existing test suite were not run.
 
-# Build client
-npm run build:client
-```
+## Status and limitations
 
-### ตรวจสอบ Type
+Educational prototype; runtime verification pending. Card data is held in memory and does not provide durable storage. Review the migration hold list before execution. This copy excludes dependencies, generated output, and Git metadata; the original history remains unchanged. Existing tests and workshop notes are evidence to review, not proof of passing validation.
 
-ตรวจสอบ TypeScript types:
+## Screenshots, contributions and license
 
-```bash
-npm run typecheck
-```
-
-## 🎯 สคริปต์ที่มีให้ใช้
-
-| คำสั่ง | คำอธิบาย |
-|--------|----------|
-| `npm run dev` | รัน development mode ทั้ง server และ client |
-| `npm run dev:server` | รัน server แบบ development |
-| `npm run dev:client` | รัน client แบบ development |
-| `npm run build` | Build ทั้งโปรเจค |
-| `npm run build:server` | Build server |
-| `npm run build:client` | Build client |
-| `npm run typecheck` | ตรวจสอบ TypeScript types ทั้ง server และ client |
-
-## 💡 เทคโนโลยีที่ใช้
-
-### Frontend
-- **React**: UI framework
-- **Vite**: Build tool และ dev server
-- **TypeScript**: Type safety
-
-### Backend
-- **Express**: Web framework
-- **TypeScript**: Type safety
-- **Bun/esbuild**: Build tools
-
-### Development
-- **Concurrently**: รันหลาย process พร้อมกัน
-
-## 📡 API Endpoints
-
-| Method | Endpoint | คำอธิบาย |
-|--------|----------|----------|
-| GET | `/api/cards` | ดึงข้อมูลไพ่ทั้งหมด |
-| GET | `/api/cards/random` | สุ่มไพ่ 1 ใบ |
-| GET | `/api/cards/:id` | ดึงข้อมูลไพ่ตาม ID |
-| POST | `/api/cards` | สร้างไพ่ใบใหม่ |
-| PUT | `/api/cards/:id` | แก้ไขข้อมูลไพ่ |
-| DELETE | `/api/cards/:id` | ลบไพ่ |
-
-## 🃏 โครงสร้างข้อมูลไพ่
-
-```typescript
-interface Card {
-  id: string;        // รหัสไพ่
-  emoji: string;     // อีโมจิประจำไพ่
-  name: string;      // ชื่อไพ่
-  meaning: string;   // ความหมายของไพ่
-}
-```
-
-## 🔧 รายละเอียดการพัฒนา
-
-- **การจัดเก็บข้อมูล**: ใช้ in-memory array (ไม่มีฐานข้อมูล)
-- **การทดสอบ**: ยังไม่ได้ติดตั้ง testing framework
-- **การ Build**:
-    - Client ใช้ Vite
-    - Server ใช้ bun/esbuild
-
-## 🤝 การพัฒนา
-
-### Quick Start
-
-1. Clone repository
-2. รัน `npm install` เพื่อติดตั้ง dependencies
-3. รัน `npm run dev` เพื่อเริ่มพัฒนา
-4. เปิดเบราว์เซอร์และเข้าถึง frontend
-5. แก้ไขโค้ดได้เลย! เซิร์ฟเวอร์จะ reload อัตโนมัติ
-
-### Workflow แนะนำ
-
-- ใช้ `npm run dev` เมื่อต้องการพัฒนาทั้ง frontend และ backend พร้อมกัน
-- ใช้ `npm run dev:client` หรือ `npm run dev:server` เมื่อต้องการทำงานเฉพาะส่วน
-- รัน `npm run typecheck` ก่อน commit เพื่อตรวจสอบ types
-- รัน `npm run build` เพื่อทดสอบว่า production build ทำงานได้
-
----
-
-Enjoy the luck, Emoji Tarot! 🎴✨
+No verified screenshots or live demo are included. Confirm your workshop contributions and redistribution rights before publishing. No new license is assigned.
